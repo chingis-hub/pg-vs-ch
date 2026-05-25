@@ -4,8 +4,11 @@ Usage: python benchmark.py
 """
 import time
 import statistics
+from pathlib import Path
 import psycopg2
 import clickhouse_connect
+
+ROOT = Path(__file__).parent.parent
 
 PG   = dict(host="localhost", port=5432, dbname="taxidb", user="postgres", password="postgres")
 CH   = dict(host="localhost", port=8123, username="default", password="")
@@ -63,9 +66,9 @@ def print_results(pg_times: list[float], ch_times: list[float]):
 
 
 if __name__ == "__main__":
-    with open("query_postgres.sql") as f:
+    with open(ROOT / "sql" / "query_postgres.sql") as f:
         pg_query = f.read().strip()
-    with open("query_clickhouse.sql") as f:
+    with open(ROOT / "sql" / "query_clickhouse.sql") as f:
         ch_query = f.read().strip()
 
     print("=== PostgreSQL ===")

@@ -14,8 +14,9 @@ from psycopg2.extras import execute_values
 import clickhouse_connect
 from pathlib import Path
 
+ROOT      = Path(__file__).parent.parent
 DATA_URL  = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-02.parquet"
-DATA_FILE = "yellow_tripdata_2024-02.parquet"
+DATA_FILE = ROOT / "yellow_tripdata_2024-02.parquet"
 
 PG = dict(host="localhost", port=5432, dbname="taxidb", user="postgres", password="postgres")
 CH = dict(host="localhost", port=8123, username="default", password="")
@@ -95,7 +96,7 @@ def load_postgres(df: pd.DataFrame):
     conn = psycopg2.connect(**PG)
     cur = conn.cursor()
 
-    with open("postgres_schema.sql") as f:
+    with open(ROOT / "sql" / "postgres_schema.sql") as f:
         cur.execute(f.read())
     conn.commit()
 
@@ -130,7 +131,7 @@ def load_clickhouse(df: pd.DataFrame):
     print("  connecting to ClickHouse...")
     client = clickhouse_connect.get_client(**CH)
 
-    with open("clickhouse_schema.sql") as f:
+    with open(ROOT / "sql" / "clickhouse_schema.sql") as f:
         client.command(f.read())
 
     ch_df = df.copy()
