@@ -3,6 +3,22 @@
 Compares a row-oriented DB (PostgreSQL) against a column-oriented DB (ClickHouse)
 on NYC TLC Yellow Taxi trip data.
 
+## Project structure
+
+```
+pg-vs-ch/
+├── docker-compose.yml
+├── requirements.txt
+├── sql/
+│   ├── postgres_schema.sql
+│   ├── clickhouse_schema.sql
+│   ├── query_postgres.sql
+│   └── query_clickhouse.sql
+└── scripts/
+    ├── load_data.py
+    └── benchmark.py
+```
+
 ## Setup
 
 ```powershell
@@ -13,17 +29,17 @@ pip install -r requirements.txt
 ## Load data
 
 ```powershell
-python load_data.py
+python scripts/load_data.py
 ```
 
 Downloads `yellow_tripdata_2024-02.parquet` (~500 MB, ~3.6 M rows) and loads it
 into both databases. To limit rows for a quick test, set `ROW_LIMIT` at the top
-of `load_data.py` (e.g. `5_000`). Set to `None` for the full dataset.
+of `scripts/load_data.py` (e.g. `5_000`). Set to `None` for the full dataset.
 
 ## Run benchmark
 
 ```powershell
-python benchmark.py
+python scripts/benchmark.py
 ```
 
 Executes each query 3 times and prints a results table.
